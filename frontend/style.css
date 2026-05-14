@@ -1,0 +1,45 @@
+/* Custom fonts and utility setup */
+:root {
+  --glass-bg: rgba(253, 255, 245, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.15);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-outfit {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism utility */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Specific styling for the generated icon if it is black/transparent */
+.filter-white {
+  /* To make standard openweathermap icons pop nicely on dark backgrounds */
+  filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+}
