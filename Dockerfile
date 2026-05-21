@@ -4,7 +4,7 @@ WORKDIR /app
 
 
 COPY backend/package*.json ./backend/
-COPY .env .env
+COPY . .
 
 
 WORKDIR /app/backend
