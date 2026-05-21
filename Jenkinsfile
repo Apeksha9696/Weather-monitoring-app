@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'weather-app:latest'
         CONTAINER_NAME = 'weather-app-container'
+        // Securely retrieve the weather API key from Jenkins credentials
+        WEATHER_API_KEY = credentials('weather-api-key')
     }
 
     stages {
@@ -13,12 +15,28 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                echo "Installing backend dependencies..."
+                dir('backend') {
+                    bat "npm install"
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo "Running backend unit tests..."
+                dir('backend') {
+                    bat "npm test"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                script {
-                    echo "Building Docker image..."
-                    bat "docker build -t ${DOCKER_IMAGE} ."
-                }
+                echo "Building Docker image..."
+                bat "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
@@ -26,20 +44,28 @@ pipeline {
             steps {
                 script {
                     echo "Stopping existing container (if any)..."
-                    def stopStatus = bat(script: "docker stop ${CONTAINER_NAME}", returnStatus: true)
-                    if (stopStatus != 0) {
-                        echo "No running container named ${CONTAINER_NAME} was found or it could not be stopped."
-                    }
-
-                    def rmStatus = bat(script: "docker rm ${CONTAINER_NAME}", returnStatus: true)
-                    if (rmStatus != 0) {
-                        echo "No container named ${CONTAINER_NAME} was found to remove."
-                    }
+                    // Use standard batch logic to prevent failure if container does not exist
+                    bat "docker stop ${CONTAINER_NAME} || exit 0"
+                    bat "docker rm ${CONTAINER_NAME} || exit 0"
 
                     echo "Running new container..."
-                    bat "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}"
+                    // Run container and inject WEATHER_API_KEY environment variable
+                    bat "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} -e WEATHER_API_KEY=${WEATHER_API_KEY} ${DOCKER_IMAGE}"
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning up workspace..."
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully! The weather application is running on port 3000."
+        }
+        failure {
+            echo "Pipeline failed. Please review the build log for errors."
         }
     }
 }
