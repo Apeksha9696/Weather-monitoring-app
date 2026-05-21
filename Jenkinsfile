@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'windows' }
+    agent any
 
     environment {
         DOCKER_IMAGE = 'weather-app:latest'
