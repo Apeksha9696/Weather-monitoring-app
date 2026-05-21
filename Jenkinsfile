@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'windows' }
 
     environment {
         DOCKER_IMAGE = 'weather-app:latest'
@@ -26,9 +26,16 @@ pipeline {
             steps {
                 script {
                     echo "Stopping existing container (if any)..."
-                    bat "docker stop ${CONTAINER_NAME} || true"
-                    bat "docker rm ${CONTAINER_NAME} || true"
-                    
+                    def stopStatus = bat(script: "docker stop ${CONTAINER_NAME}", returnStatus: true)
+                    if (stopStatus != 0) {
+                        echo "No running container named ${CONTAINER_NAME} was found or it could not be stopped."
+                    }
+
+                    def rmStatus = bat(script: "docker rm ${CONTAINER_NAME}", returnStatus: true)
+                    if (rmStatus != 0) {
+                        echo "No container named ${CONTAINER_NAME} was found to remove."
+                    }
+
                     echo "Running new container..."
                     bat "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}"
                 }
