@@ -1,25 +1,148 @@
 /* Custom fonts and utility setup */
 :root {
-  --glass-bg: rgba(253, 255, 245, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.15);
+  /* Default/Green theme (usually sunny/clear or fallback) */
+  --bg-gradient: linear-gradient(135deg, #FDFFF5 0%, #E8F5E9 50%, #A5D6A7 100%);
+  --text-main: #064e3b; /* emerald-950 */
+  --text-sub: #047857; /* emerald-700 */
+  --card-bg: rgba(253, 255, 245, 0.75);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --card-shadow: 0 8px 32px 0 rgba(4, 120, 87, 0.15);
+  --accent: #059669; /* emerald-600 */
+  --accent-hover: #047857; /* emerald-700 */
+  --accent-light: rgba(209, 250, 229, 0.8); /* emerald-100 */
+  --accent-light-bg: rgba(236, 253, 245, 0.8); /* emerald-50 */
+}
+
+/* Clear/Sunny Theme */
+body.theme-clear {
+  --bg-gradient: linear-gradient(135deg, #FFFDF0 0%, #FFF2CC 50%, #FFD966 100%);
+  --text-main: #7A3E00;
+  --text-sub: #A0522D;
+  --card-bg: rgba(255, 254, 245, 0.85);
+  --card-border: rgba(255, 255, 255, 0.75);
+  --card-shadow: 0 8px 32px 0 rgba(160, 82, 45, 0.15);
+  --accent: #D35400;
+  --accent-hover: #BA4A00;
+  --accent-light: rgba(255, 235, 204, 0.8);
+  --accent-light-bg: rgba(255, 248, 235, 0.8);
+}
+
+/* Cloudy/Mist/Fog Theme */
+body.theme-clouds {
+  --bg-gradient: linear-gradient(135deg, #F0F4F8 0%, #D9E2EC 50%, #BCCCDC 100%);
+  --text-main: #102A43;
+  --text-sub: #486581;
+  --card-bg: rgba(240, 244, 248, 0.8);
+  --card-border: rgba(255, 255, 255, 0.7);
+  --card-shadow: 0 8px 32px 0 rgba(72, 101, 129, 0.15);
+  --accent: #334E68;
+  --accent-hover: #243B53;
+  --accent-light: rgba(217, 226, 236, 0.8);
+  --accent-light-bg: rgba(240, 244, 248, 0.8);
+}
+
+/* Rainy/Drizzle Theme */
+body.theme-rain {
+  --bg-gradient: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  --text-main: #F8FAFC;
+  --text-sub: #CBD5E1;
+  --card-bg: rgba(30, 41, 59, 0.75);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --accent: #38BDF8;
+  --accent-hover: #0EA5E9;
+  --accent-light: rgba(56, 189, 248, 0.2);
+  --accent-light-bg: rgba(15, 23, 42, 0.6);
+}
+
+/* Stormy Theme */
+body.theme-storm {
+  --bg-gradient: linear-gradient(135deg, #0F172A 0%, #020617 100%);
+  --text-main: #F1F5F9;
+  --text-sub: #94A3B8;
+  --card-bg: rgba(15, 23, 42, 0.85);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --accent: #818CF8;
+  --accent-hover: #6366F1;
+  --accent-light: rgba(129, 140, 248, 0.2);
+  --accent-light-bg: rgba(2, 6, 23, 0.7);
+}
+
+/* Snowy Theme */
+body.theme-snow {
+  --bg-gradient: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #BAE6FD 100%);
+  --text-main: #0C4A6E;
+  --text-sub: #0284C7;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --card-border: rgba(255, 255, 255, 0.7);
+  --card-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.1);
+  --accent: #0EA5E9;
+  --accent-hover: #0284C7;
+  --accent-light: rgba(224, 242, 254, 0.8);
+  --accent-light-bg: rgba(240, 249, 255, 0.8);
 }
 
 body {
   font-family: 'Outfit', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  transition: background 0.8s ease, color 0.5s ease;
 }
 
 .font-outfit {
   font-family: 'Outfit', sans-serif;
 }
 
+/* Semantic utility mappings */
+.text-primary {
+  color: var(--text-main);
+  transition: color 0.5s ease;
+}
+
+.text-secondary {
+  color: var(--text-sub);
+  transition: color 0.5s ease;
+}
+
+.accent-bg {
+  background-color: var(--accent);
+  transition: background-color 0.5s ease;
+}
+
+.accent-bg-hover:hover {
+  background-color: var(--accent-hover);
+}
+
+.accent-text {
+  color: var(--accent);
+  transition: color 0.5s ease;
+}
+
+.accent-light-bg {
+  background-color: var(--accent-light-bg);
+  transition: background-color 0.5s ease;
+}
+
+.accent-light-border {
+  border-color: var(--accent-light);
+  transition: border-color 0.5s ease;
+}
+
+.accent-icon-container {
+  background-color: var(--accent-light);
+  color: var(--accent);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 /* Glassmorphism utility */
 .glass-card {
-  background: var(--glass-bg);
+  background: var(--card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 /* Animations */
@@ -42,4 +165,14 @@ body {
 .filter-white {
   /* To make standard openweathermap icons pop nicely on dark backgrounds */
   filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

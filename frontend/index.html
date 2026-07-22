@@ -3,81 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+    <title>WeatherInfo - Live Forecast & Favorites</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-br from-[#FDFFF5] via-[#E8F5E9] to-[#A5D6A7] min-h-screen flex items-center justify-center p-4 font-outfit text-emerald-900">
+<body class="min-h-screen flex items-center justify-center p-4 font-outfit text-primary transition-all duration-500">
 
     <div class="glass-card w-full max-w-md rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-all duration-500">
-        <!-- Decorator circles for glassmorphism effect -->
-        <div class="absolute -top-16 -left-16 w-32 h-32 bg-emerald-200 opacity-40 rounded-full blur-2xl"></div>
-        <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-white opacity-60 rounded-full blur-2xl"></div>
+        <!-- Universal glass decorator circles -->
+        <div class="absolute -top-16 -left-16 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-white/30 rounded-full blur-2xl"></div>
         
-        <h1 class="text-3xl font-bold text-center text-emerald-800 mb-6 tracking-wide drop-shadow-sm">Weather<span class="font-light">Info</span></h1>
+        <h1 class="text-3xl font-bold text-center text-primary mb-6 tracking-wide drop-shadow-sm">Weather<span class="font-light">Info</span></h1>
         
-        <form id="weather-form" class="relative mb-8 z-10">
+        <form id="weather-form" class="relative mb-4 z-10">
             <input 
                 type="text" 
                 id="city-input" 
                 placeholder="Enter city name..." 
-                class="w-full bg-white border border-emerald-200 text-emerald-900 placeholder-emerald-600/70 px-5 py-3 rounded-full outline-none focus:bg-white/90 focus:ring-2 focus:ring-emerald-400 transition-all shadow-sm"
+                class="w-full bg-white/80 border accent-light-border text-primary placeholder-current/40 px-5 py-3 rounded-full outline-none focus:bg-white/95 focus:ring-2 accent-light-border transition-all shadow-sm"
                 autocomplete="off"
                 required
             >
             <button 
                 type="submit" 
-                class="absolute right-1 top-1 bottom-1 bg-emerald-600 text-white w-10 rounded-full flex items-center justify-center hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all shadow-md"
+                class="absolute right-1 top-1 bottom-1 accent-bg text-white w-10 rounded-full flex items-center justify-center accent-bg-hover hover:scale-105 active:scale-95 transition-all shadow-md"
             >
                 <i class="fas fa-search"></i>
             </button>
         </form>
 
+        <!-- Favorites Quick-Access Pills -->
+        <div id="favorites-container" class="flex flex-wrap gap-2 mb-6 justify-center z-10 relative hidden">
+            <!-- Dynamically populated favorite pills -->
+        </div>
+        
         <div id="loading" class="hidden flex-col items-center justify-center py-8 z-10 relative">
-            <div class="spinner border-4 border-emerald-200 border-t-emerald-600 w-10 h-10 rounded-full animate-spin"></div>
-            <p class="text-emerald-700 mt-4 font-medium animate-pulse">Fetching weather...</p>
+            <div class="spinner border-4 border-current/20 border-t-current w-10 h-10 rounded-full animate-spin text-primary"></div>
+            <p class="text-secondary mt-4 font-medium animate-pulse">Fetching weather...</p>
         </div>
 
-        <div id="error-message" class="hidden text-center bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mb-4 z-10 relative backdrop-blur-sm">
-            <i class="fas fa-exclamation-circle mb-2 text-2xl text-red-500"></i>
+        <div id="error-message" class="hidden text-center bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mb-4 z-10 relative backdrop-blur-sm">
+            <i class="fas fa-exclamation-circle mb-2 text-2xl text-red-500 animate-bounce"></i>
             <p id="error-text">City not found.</p>
         </div>
 
         <div id="weather-result" class="hidden flex-col items-center z-10 relative fade-in">
-            <div class="text-center mb-2">
-                <h2 id="city-name" class="text-4xl font-bold text-emerald-900 tracking-wide">London</h2>
-                <p id="weather-desc" class="text-emerald-700 capitalize text-lg font-medium tracking-wide mt-1">Light Rain</p>
+            <div class="text-center w-full flex flex-col items-center mb-2">
+                <div class="flex items-center justify-center gap-3 w-full">
+                    <h2 id="city-name" class="text-4xl font-bold text-primary tracking-wide">London</h2>
+                    <button id="fav-btn" class="text-2xl text-secondary hover:text-yellow-500 hover:scale-110 active:scale-95 transition-all outline-none" title="Save City">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                <p id="weather-desc" class="text-secondary capitalize text-lg font-medium tracking-wide mt-1">Light Rain</p>
             </div>
             
-            <div class="flex items-center justify-center my-4">
-                <!-- Removed filter-white class so the original OpenWeather icons render naturally (they are usually colorful) -->
-                <img id="weather-icon" src="" alt="Weather Icon" class="w-32 h-32 drop-shadow-md">
+            <div class="flex items-center justify-center my-2">
+                <img id="weather-icon" src="" alt="Weather Icon" class="w-28 h-28 drop-shadow-md">
             </div>
             
-            <div class="text-6xl font-bold text-emerald-900 mb-8 drop-shadow-sm">
+            <div class="text-6xl font-bold text-primary mb-6 drop-shadow-sm">
                 <span id="temperature">22</span>°C
             </div>
 
             <div class="grid grid-cols-2 gap-4 w-full">
-                <div class="bg-emerald-50/80 rounded-2xl p-4 flex items-center gap-3 border border-emerald-100 backdrop-blur-md">
-                    <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center text-emerald-600">
+                <div class="accent-light-bg rounded-2xl p-4 flex items-center gap-3 border accent-light-border backdrop-blur-md">
+                    <div class="accent-icon-container w-10 h-10 rounded-full flex items-center justify-center">
                         <i class="fas fa-tint"></i>
                     </div>
                     <div>
-                        <p class="text-emerald-700/80 text-xs uppercase tracking-wider font-semibold">Humidity</p>
-                        <p id="humidity" class="text-emerald-900 font-bold text-xl">45%</p>
+                        <p class="text-secondary text-[10px] uppercase tracking-wider font-semibold">Humidity</p>
+                        <p id="humidity" class="text-primary font-bold text-lg">45%</p>
                     </div>
                 </div>
-                <div class="bg-emerald-50/80 rounded-2xl p-4 flex items-center gap-3 border border-emerald-100 backdrop-blur-md">
-                    <div class="bg-emerald-100 w-10 h-10 rounded-full flex items-center justify-center text-emerald-600">
+                <div class="accent-light-bg rounded-2xl p-4 flex items-center gap-3 border accent-light-border backdrop-blur-md">
+                    <div class="accent-icon-container w-10 h-10 rounded-full flex items-center justify-center">
                         <i class="fas fa-wind"></i>
                     </div>
                     <div>
-                        <p class="text-emerald-700/80 text-xs uppercase tracking-wider font-semibold">Wind</p>
-                        <p class="text-emerald-900 font-bold text-xl">Moderate</p>
+                        <p class="text-secondary text-[10px] uppercase tracking-wider font-semibold">Wind</p>
+                        <p id="wind-speed" class="text-primary font-bold text-lg">Moderate</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- 5-Day Forecast Row -->
+            <div class="mt-6 border-t border-white/20 pt-5 w-full">
+                <h3 class="text-base font-bold text-primary mb-3 text-center tracking-wide">5-Day Forecast</h3>
+                <div id="forecast-row" class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
+                    <!-- Forecast Cards -->
                 </div>
             </div>
         </div>
