@@ -1,19 +1,39 @@
-# Devops_project
+# Weather App — DevOps Project
 
-This repository contains a simple DevOps-focused web application with separate frontend and backend components.
+A full-stack weather application with a Node.js backend and static frontend, containerized with Docker and automated via Jenkins and GitHub Actions.
 
-## Project structure
+## Project Structure
 
-- `backend/` - Node.js server and backend tests
-- `frontend/` - Static frontend files
-- `Dockerfile` - Docker image build configuration
-- `Jenkinsfile` - CI/CD pipeline definition
+```
+├── backend/          # Node.js/Express API server
+├── frontend/         # Static HTML/CSS/JS frontend
+├── Dockerfile        # Docker image configuration
+├── Jenkinsfile       # Jenkins CI/CD pipeline
+└── .github/workflows # GitHub Actions workflow
+```
 
-## Backend
+## Features
 
-The backend is a Node.js application located in `backend/`.
+- Current weather by city (temperature, humidity, wind speed, condition)
+- 5-day forecast
+- Served as a single app — backend serves the frontend statically
 
-### Run locally
+## Prerequisites
+
+- Node.js 18+
+- A [OpenWeatherMap API key](https://openweathermap.org/api)
+- Docker (optional)
+
+## Getting Started
+
+### 1. Configure environment
+
+```bash
+cp backend/.env.example backend/.env
+# Add your WEATHER_API_KEY to backend/.env
+```
+
+### 2. Run locally
 
 ```bash
 cd backend
@@ -21,33 +41,43 @@ npm install
 node server.js
 ```
 
-### Test
+Open `http://localhost:3000` in your browser.
+
+### 3. Run tests
 
 ```bash
 cd backend
 npm test
 ```
 
-## Frontend
-
-The frontend is a static web app in `frontend/`.
-
-### Run locally
-
-Open `frontend/index.html` in a browser, or use any static server.
-
 ## Docker
 
-Build the Docker image:
-
 ```bash
-docker build -t devops_project .
+docker build -t weather-app .
+docker run -p 3000:3000 -e WEATHER_API_KEY=<your_api_key> weather-app
 ```
 
 ## CI/CD
 
-This repository includes a `Jenkinsfile` and GitHub workflow for automated builds and deployments.
+### Jenkins
 
-## License
+The `Jenkinsfile` defines a pipeline with these stages:
 
-This project does not include a license file. Add one if you want to specify usage terms.
+1. Checkout
+2. Install Dependencies
+3. Run Tests
+4. Build Docker Image
+5. Deploy Container on port 3000
+
+Requires a Jenkins credential named `weather-api-key`.
+
+### GitHub Actions
+
+The `.github/workflows/main.yml` workflow triggers on pushes to `main`/`master` and runs install, test, and Docker build steps.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/weather?city=<city>` | Current weather |
+| GET | `/forecast?city=<city>` | 5-day forecast |
